@@ -1,0 +1,10 @@
+{
+    "elastic": {
+      "node": "https://localhost:9200",
+      "username": "elastic",
+      "password": "PnWN+uKyBase=uuO07+y",
+      "apiKey": "RnhaZjk0VUJxNzUwNlg2ZVFHRjI6TVdodWlNa1RUSnVBSU9tZjFsZ01BZw=="
+    }
+}
+
+
