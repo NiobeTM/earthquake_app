@@ -46,7 +46,6 @@ app.get('/results', (req, res) => {
               {
                 match: { place: passedLocation },
               },
-              // for those who use prettier, make sure there is no whitespace.
               {
                 range: {
                   '@timestamp': {
