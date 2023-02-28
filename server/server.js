@@ -1,51 +1,55 @@
 const { Client } = require('@elastic/elasticsearch');
-const client = require('./elasticsearch/client');
 const express = require('express');
+const client = require('./elasticsearch/client');
 const cors = require('cors');
 
 const app = express();
 
-const data = require('./data_management/retrieve_and_ingest_data');
+// const data = require('./data_management/retrieve_and_ingest_data');
+const data = require('./data_management/retrieve_and_ingest_data_diavgeia');
 
 app.use('/ingest_data', data);
 
 app.use(cors());
 
 app.get('/results', (req, res) => {
-  const passedType = req.query.type;
-  const passedMag = req.query.mag;
-  const passedLocation = req.query.location;
+
+  const passedDecisionTypeId = req.query.decisionTypeId;
+  // const passedDocumentType = req.query.documentType;
+  const passedAda = req.query.ada;
+  // const passedDocumentType = req.query.documentType;
+  const passedProtocolNumber = req.query.protocolNumber;
+  // // const passedSubject = req.query.subject;
   const passedDateRange = req.query.dateRange;
-  const passedSortOption = req.query.sortOption;
+  // const passedSortOption = req.query.sortOption;
 
   async function sendESRequest() {
     const body = await client.search({
-      index: 'earthquakes',
+      index: 'diavgeia_data_index',
       body: {
-        sort: [
-          {
-            mag: {
-              order: passedSortOption,
-            },
-          },
-        ],
-        size: 300,
+        // sort: [
+        //   {
+        //     thematicCategoryIds: {
+        //       order: passedSortOption,
+        //     },
+        //   },
+        // ],
+        size: 10000,
         query: {
           bool: {
-            filter: [
+            must: [
               {
-                term: { type: passedType },
+                match_phrase: { decisionTypeId: passedDecisionTypeId },
               },
               {
-                range: {
-                  mag: {
-                    gte: passedMag,
-                  },
-                },
+                match_phrase: { protocolNumber: passedProtocolNumber },
               },
               {
-                match: { place: passedLocation },
+                match_phrase: { ada: passedAda }
               },
+              // {
+              //   match_phrase: { documentType: passedDocumentType }
+              // },
               {
                 range: {
                   '@timestamp': {
